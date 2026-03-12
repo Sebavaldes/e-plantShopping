@@ -255,7 +255,7 @@ function ProductList({ onHomeClick }) {
 
     const handleContinueShopping = (e) => {
         e.preventDefault();
-        setShowCart(false);
+        setShowCart(true);
     };
 
     const handleAddToCart = (product) => {
@@ -289,14 +289,51 @@ function ProductList({ onHomeClick }) {
                     </h1></a></div>
                 </div>
             </div>
-            {!showCart ? (
-                <div className="product-grid">
+{!showCart ? (
+  <div className="product-grid">
+    {plantsArray.map((category, index) => (
+      <div key={index}>
+        <h2>{category.category}</h2>
 
+        <div className="plants-grid">
+          {category.plants.map((product, idx) => {
 
-                </div>
-            ) : (
-                <CartItem onContinueShopping={handleContinueShopping} />
-            )}
+            const isInCart = CartItems.some(
+              item => item.name === product.name
+            );
+
+            return (
+              <div className="plant-card" key={idx}>
+                
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="plant-image"
+                />
+
+                <h3>{product.name}</h3>
+
+                <p>{product.description}</p>
+
+                <p>{product.cost}</p>
+
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  disabled={isInCart}
+                >
+                  {isInCart ? "Added to Cart" : "Add to Cart"}
+                </button>
+
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+  </div>
+) : (
+  <CartItem onContinueShopping={handleContinueShopping} />
+)}
         </div>
     );
 }
